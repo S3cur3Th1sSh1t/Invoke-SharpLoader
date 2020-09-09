@@ -36,11 +36,11 @@ public class SharpEncrypt
     {
         Console.WriteLine(@"   ______                ____                       __ ");
         Console.WriteLine(@"  / __/ /  ___ _______  / __/__  __________ _____  / /_");
-        Console.WriteLine(@" _\ \/ _ \/ _ `/ __/ _ \/ _// _ \/ __/ __/ // / _ \/ __/");
-        Console.WriteLine(@"/___/_//_/\_,_/_/ / .__/___/_//_/\__/_/  \_, / .__/\__/ ");
-        Console.WriteLine(@"                 /_/                    /___/_/         ");
-        Console.WriteLine(@"                                                                          ");
-        Console.WriteLine(@"            Compress and AES Encrypt CSharp Files to Base64 String        ");
+        Console.WriteLine(@" _\ \/ _ \/ _ `/__/ _ \/ _// _ \/ __/ __/ // / _ \/ __/");
+        Console.WriteLine(@"/___/_//_/\_,_/_// .__/___/_//_/\__/_/  \_, / .__/\__/ ");
+        Console.WriteLine(@"                /_/                    /___/_/         ");
+        Console.WriteLine(@"                                                       ");
+        Console.WriteLine(@"                       Compress and AES encrypt files  ");
         Console.WriteLine();
     }
 
@@ -106,11 +106,7 @@ public class SharpEncrypt
     public static void Main(params string[] args)
     {
         PrintBanner();
-        if (args.Length != 3)
-        {
-            Console.WriteLine("Usage: p0wnedEncrypt.exe <p0wnedShell.exe> <PassWord> <p0wnedShell.enc>");
-            
-        }
+        
         if (File.Exists(args[0]))
         {
             string FileName = args[0];
